@@ -36,7 +36,7 @@
     >my code input to start server
     ```
     sudo systemctl start apache2
-```
+    ```
 6. View the web server in action
     > Here is a screenshot of the web server in action:
     ![apache web server](images/apache.png)
