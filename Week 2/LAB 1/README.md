@@ -22,7 +22,7 @@
     The security group I added to the ec2 during creation allow https access
     ```
 4. Connect to virtual machine
-     ```
+    ```
     I used the amazon EC2 instance connect to connect to my VM
     ```
 5. Install web server   
