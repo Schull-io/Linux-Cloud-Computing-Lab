@@ -15,11 +15,11 @@
     ```
     I used the amazon EC2 instance connect to connect to my VM
     ```
-  Understand VM images
+3. Understand VM images
     * I Launched an instance and select a Community AMI configure the instance
     * I connected the instance with SSH
 
- 3. VM power states
+4. VM power states
     #### stop instance
     > my code input
     ```
