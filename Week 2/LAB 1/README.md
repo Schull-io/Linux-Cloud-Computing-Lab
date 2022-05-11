@@ -19,7 +19,7 @@
     ```
 3. Open port 80 for web traffic
     ```
-    The security group I added to the ec2 during creation allow https access
+    The security group I added to the ec2 during creation allow http access
     ```
 4. Connect to virtual machine
     ```

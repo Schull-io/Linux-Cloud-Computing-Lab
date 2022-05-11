@@ -33,17 +33,19 @@
     sudo service apache2 stop
     ```
 
-Challenge: Create a boostrapping script that will install and start this service on new EC2 VMs
+### Challenge: Create a boostrapping script that will install and start this service on new EC2 VMs
     
     * Server installation and starting command
+
     ```
     sudo yum update -y
     sudo yum install -y httpd
     sudo service start httpd
     ```
+
     * Add the above script in the `user data` box in the `advance details` section of the instance creation
 
-    
+
 Notes:
 
 Install and Configure Apache (Ubuntu)

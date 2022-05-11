@@ -1,7 +1,7 @@
 # Lab 2: Manage Linux VMs with the AWS CLI
 
 
- Create virtual machine
+ ### Create virtual machine
 
     > my code input:
     ```
@@ -11,15 +11,15 @@
         --key-name poly4key
         --security-group-ids sg-05d92cf7903c4c896
     ```
- Connect to VM
+ ### Connect to VM
     ```
     I used the amazon EC2 instance connect to connect to my VM
     ```
- Understand VM images
+ ### Understand VM images
     * I Launched an instance and select a Community AMI configure the instance
     * I connected the instance with SSH
 
- VM power states
+ ### VM power states
     #### stop instance
     > my code input
     ```
