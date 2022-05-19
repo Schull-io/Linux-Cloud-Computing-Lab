@@ -2,229 +2,90 @@
 
 ## Compute Engine
 
-### Tutorials
-
 [Quickstart using a Linux VM](https://cloud.google.com/compute/docs/quickstart-linux "Quickstart using a Linux VM")
+
+1. In the Cloud Console, go to the Create an instance page. `Go to Create an instance`
+
+2. In the **Boot disk** section, click **Change** to begin configuring your boot disk.
+3. On the **Public images** tab, choose **Ubuntu** from the **Operating system** list.
+4. Choose **Ubuntu 20.04 LTS** from the **Version** list.
+5. Click **Select**.
+6. In the **Firewall** section, select **Allow HTTP traffic**.
+To create the VM, click **Create**.
 
 [Connect to Linux VMs](https://cloud.google.com/compute/docs/instances/connecting-to-instance "Connect to Linux VMs")
 
+1. In the list of virtual machine instances, click SSH in the row of the instance that you want to connect to.
+
+2. Open ssh in browser automatically connects into the VM.
+
+3. I copied the command to input in the CLI as an alternative to ssh into the VM.
+```bash
+gcloud beta compute ssh --zone "us-west4-b" "poly4-1"  --tunnel-through-iap --project "schull-bootcamp"
+```
+4. To test run the VM, I installed nginx server.
+![apache web server](images/apache.png)
+
+
 [Connecting to Linux VMs using advanced methods](https://cloud.google.com/compute/docs/instances/connecting-advanced "Connecting to Linux VMs using advanced methods")
+
+1. Using the bash CLI
+```Bash
+gcloud beta compute ssh --zone "us-west4-b" "poly4-2"  --tunnel-through-iap --project "schull-bootcamp"
+```
+I was able to ssh into the new VM.
 
 [Using startup scripts on Linux VMs](https://cloud.google.com/compute/docs/instances/startup-scripts/linux "Using startup scripts on Linux VMs")
 
+### Passing a Linux startup script directly to a new VM
+
+1. In the Google Cloud Console, go to the **Create an instance** page.
+
+2. For **Boot disk**, select **Change**, and select a **Linux** operating system.
+
+3. Expand the **Networking, disks, security, management, sole tenancy** section, and do the following:
+
+* Expand the **Management** section.
+* In the **Automation** section, add the following startup script:
+```
+#! /bin/bash
+apt update
+apt -y install apache2
+cat <<EOF > /var/www/html/index.html
+<html><body><p>Linux startup script added directly.</p></body></html>
+```
+4. Click **Create**
+### Passing a Linux startup script directly to an existing VM
+
+
+1. Under **Custom metadata**, specify the following:
+* key: `startup-script`
+* value:
+```
+#! /bin/bash
+apt update
+apt -y install apache2
+cat <<EOF > /var/www/html/index.html
+<html><body><p>Linux startup script added directly with a little edit.</p></body></html>
+```
+
+
+
+
+### Passing a Linux startup script from a local file
+
+
+
 [Querying VM metadata](https://cloud.google.com/compute/docs/metadata/querying-metadata "Querying VM metadata")
 
-## gcloud
-
-### Understanding commands
-
+I was also able to install a web server apache2, verify that it's working and able to survive a reboot
 ```bash
-# The gcloud command format.
-gcloud + release level (optional) + component + entity + operation + positional args + flags
+sudo install apache2
 ```
-
 ```bash
-# Example gcloud command for creating a virtual machine instance.
-gcloud compute instances create <instance_name> --zone=<zone>
+sudo systemctl start apache2
 ```
-
-## Running commands
-
-```bash
-# Get the gcloud help information.
-gcloud help
+```Bash
+sudo systemctl enable apache2
 ```
-
-```bash
-# Get the gcloud cheat sheet.
-gcloud cheat-sheet
-```
-
-```bash
-# Get projects help information.
-gcloud projects --help
-```
-
-```bash
-# Get projects create help information.
-gcloud projects create --help
-```
-
-```bash
-# Create a new project and set as default.
-gcloud projects create <project_id> --name=<project_name> --set-as-default
-```
-
-```bash
-# List the available billing accounts.
-gcloud beta billing accounts list
-```
-
-```bash
-# Link a billing account with the project.
-gcloud beta billing projects link <project_id> --billing-account=<account_id>
-```
-
-```bash
-# List the available services, filter on the name 'compute', and echo the result. 
-SERVICE=$(gcloud services list --available --filter="NAME ~ ^compute" --format="value(NAME)")
-echo $SERVICE
-```
-
-```bash
-# Enable the Compute Engine API.
-gcloud services enable $SERVICE
-```
-
-```bash
-# Set the preferred Compute Engine region.
-gcloud config set compute/region <region>
-```
-
-```bash
-# Set the preferred Compute Engine zone.
-gcloud config set compute/zone <zone>
-```
-
-```bash
-# List the current configuration.
-gcloud config list
-```
-
-```bash
-# List the current networks.
-gcloud compute networks list
-```
-
-```bash
-# List the current firewall rules.
-gcloud compute firewall-rules list
-```
-
-```bash
-# Delete the firewall rules.
-gcloud compute firewall-rules delete default-allow-icmp default-allow-internal default-allow-rdp default-allow-ssh
-```
-
-```bash
-# Delete the default network.
-gcloud compute networks delete default
-```
-
-```bash
-# Create a custom mode network.
-gcloud compute networks create vpc-network --subnet-mode=custom
-```
-
-```bash
-# Create a default subnet.
-gcloud compute networks subnets create default --network=vpc-network --range=10.0.1.0/24
-```
-
-```bash
-# Add the external IP from the Cloud Shell session to a variable, add the CIDR notation, and echo the result.
-SHELL_EXTERNAL_IP=$(curl ifconfig.co)
-SHELL_EXTERNAL_IP="$SHELL_EXTERNAL_IP""/32"
-echo $SHELL_EXTERNAL_IP
-```
-
-```bash
-# Create a firewall rule for SSH traffic.
-gcloud compute firewall-rules create allow-ssh-ingress \
-  --network=vpc-network \
-  --priority=1000 \
-  --direction=INGRESS \
-  --action=ALLOW \
-  --target-tags=ssh \
-  --source-ranges=$SHELL_EXTERNAL_IP \
-  --rules=tcp:22
-```
-
-```bash
-# Create a firewall rule for web traffic.
-gcloud compute firewall-rules create allow-web-ingress \
-  --network=vpc-network\
-  --priority=1000 \
-  --direction=INGRESS \
-  --action=ALLOW \
-  --target-tags=web \
-  --source-ranges=0.0.0.0/0 \
-  --rules=tcp:80,tcp:443 
-```
-
-```bash
-# Create a service account.
-gcloud iam service-accounts create web-instance-01 --display-name=web-instance-01
-```
-
-```bash
-# Add the email address of the service account to a variable and echo the result.
-SERVICE_ACCOUNT=$(gcloud iam service-accounts list --filter="email ~ ^web-instance-01" --format="value(email)")
-echo $SERVICE_ACCOUNT
-```
-
-```bash
-# Create the instance, including a startup script.
-gcloud compute instances create web-instance-01 \
-  --machine-type=e2-micro \
-  --description="Web server" \
-  --image-project=ubuntu-os-cloud \
-  --image-family=ubuntu-2004-lts \
-  --network=vpc-network \
-  --subnet=default \
-  --service-account=$SERVICE_ACCOUNT \
-  --tags=ssh,web \
-```
-
-```bash
-# Connect to the instance over SSH.
-gcloud beta compute ssh web-instance-01
-```
-
-```bash
-# Verify that the Apache HTTP Server service is active (running).
-systemctl status apache2.service
-```
-
-```bash
-# Verify the custom index.html file.
-cat /var/www/html/index.html
-```
-
-```bash
-# Close the SSH connection.
-exit
-```
-
-```bash
-# Add the external IP from the instance to a variable, add the HTTP protocol, and echo the result.
-HTTP_ADDRESS=$(gcloud compute instances describe web-instance-01 --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
-HTTP_ADDRESS="http://""$HTTP_ADDRESS"
-echo $HTTP_ADDRESS
-```
-
-```bash
-# Verify if the instance is reachable
-curl $HTTP_ADDRESS
-```
-
-```bash
-# Stop the instance.
-gcloud compute instances stop web-instance-01
-```
-
-## More information
-
-[Free Trial and Free Tier](https://cloud.google.com/free "Free Trial and Free Tier")
-
-[Compute Engine documentation](https://cloud.google.com/compute/docs "Compute Engine documentation")
-
-[Cloud Shell documentation](https://cloud.google.com/shell/docs "Cloud Shell documentation")
-
-[Cloud SDK documentation](https://cloud.google.com/sdk/docs "Cloud SDK documentation")
-
-[The gcloud tool overview](https://cloud.google.com/sdk/gcloud "The gcloud tool overview")
-
-[The gcloud cheat sheet](https://cloud.google.com/sdk/docs/cheatsheet "The gcloud cheat sheet")
-
-[The gcloud cheat sheet: Understanding commands](https://cloud.google.com/sdk/docs/cheatsheet#understanding_commands "The gcloud cheat sheet: Understanding commands")
+Access using this ip address `34.125.239.18`
