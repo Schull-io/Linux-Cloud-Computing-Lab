@@ -1,12 +1,35 @@
 # Lab 2: Manage Linux VMs with the AWS CLI
 
 
-1. Create virtual machine
+ 1. Create virtual machine
+
+    > my code input:
+    ```
+    aws ec2 run-instances \
+        --image-id ami-0c4f7023847b90238 \
+        --instance-type t2.micro \
+        --key-name poly4key
+        --security-group-ids sg-05d92cf7903c4c896
+    ```
 2. Connect to VM
+    ```
+    I used the amazon EC2 instance connect to connect to my VM
+    ```
 3. Understand VM images
-4. Understand VM sizes
-5. VM power states
-6. Management tasks
+    * I Launched an instance and select a Community AMI configure the instance
+    * I connected the instance with SSH
+
+4. VM power states
+    #### stop instance
+    > my code input
+    ```
+    aws ec2 stop-instances --instance-ids i-5203422c
+    ```
+    #### terminate instance
+    > my code input
+    ```
+    aws ec2 terminate-instances --instance-ids i-5203422c
+    ```
 
 
 
