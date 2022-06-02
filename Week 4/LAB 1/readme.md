@@ -36,7 +36,7 @@ Create a VPC with the following property using the CLI:
     aws ec2 attach-internet-gateway --vpc-id vpc-0eba7490464b838be --internet-gateway-id igw-0bdb643bdb643db605e3c3
 
     ```
-    > Here is the screenshots of the subnets created:
+    > Here is the screenshots of the gateways created:
     ![internetgateway](create-attach-gateway.PNG)
 
 4. I created route table for the VPC in previous steps and create a route that point all traffic to gateway created earlier.
